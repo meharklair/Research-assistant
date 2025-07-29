@@ -4,12 +4,12 @@ from PyPDF2 import PdfReader
 from io import BytesIO
 from elasticsearch import Elasticsearch, helpers
 
-elastic_cloud_address = "id",
+elastic_cloud_address = "https://my-elasticsearch-project-ee9962.es.us-west-2.aws.elastic.cloud:443",
  
 
 client = Elasticsearch(
     elastic_cloud_address,
-    api_key="KEY"
+    api_key="SUlhVUw1Z0J5X3JBUlFBZGR1ZjI6VlZ3R2pGaDRYMmxRYjNSLWF5S2FoUQ=="
 )
 index_name = "search-papers"
 
