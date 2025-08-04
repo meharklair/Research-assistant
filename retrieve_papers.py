@@ -18,6 +18,7 @@ def retrive_papers(query):
                     text_field: search_query,
                 },
             },
+        "min_score": 2.0  
         }
 
     text_field = "abstract"
