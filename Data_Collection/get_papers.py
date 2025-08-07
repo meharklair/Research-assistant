@@ -4,12 +4,12 @@ from PyPDF2 import PdfReader
 from io import BytesIO
 from elasticsearch import Elasticsearch, helpers
 
-elastic_cloud_address = "https://my-elasticsearch-project-ee9962.es.us-west-2.aws.elastic.cloud:443",
-index_name = "search-papers"
+elastic_cloud_address = "https://05aa1e0d47ee450da2fc6a10f39fc911.us-central1.gcp.cloud.es.io:443"
+index_name = "search-sep4"
 
 client = Elasticsearch(
     elastic_cloud_address,
-    api_key="SUlhVUw1Z0J5X3JBUlFBZGR1ZjI6VlZ3R2pGaDRYMmxRYjNSLWF5S2FoUQ=="
+    api_key="SFJKWWhwZ0JxQjU3LVNLT1d4NmY6XzlHSXE2REV3MUM3eEhaQzQyUW80Zw=="
 )
 
 def create_mappings():
@@ -18,14 +18,10 @@ def create_mappings():
             "id":        {"type": "keyword"},
             "created":   {"type": "date"},   # default: yyyy-MM-dd
             "updated":   {"type": "date"},
-            "authors":   {"type": "list"},  # or "text" if full name search desired
-            "author":    {"type": "list"},  # or "text"
             "keyname":   {"type": "keyword"},
             "forenames": {"type": "text"},
             "title":     {"type": "text"},
-            "categories":{"type": "keyword"},
             "comments":  {"type": "text"},
-            "report-no": {"type": "keyword"},
             "abstract":  {"type": "text"},
         }
     }
@@ -50,13 +46,13 @@ def flatten_lists_in_dict(d, join_str="\n"):
             new_dict[k] = v
     return new_dict
 
-
+#create_mappings()
 sickle = Sickle('http://export.arxiv.org/oai2')
 records = sickle.ListRecords(metadataPrefix='arXiv', set='cs')
 i = 0
 record_upload = []
 for record in records:
-    if i == 10:
+    if i == 5:
         bulk_response = helpers.bulk(client, record_upload, index=index_name)
         print(bulk_response)
         break
