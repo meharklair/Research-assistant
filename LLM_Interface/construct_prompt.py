@@ -1,7 +1,5 @@
 from langchain.prompts import PromptTemplate
-from langchain_core.prompts import ChatPromptTemplate
 from Data_Retrival.retrieve_papers import retrive_papers
-import ollama
 
 def create_prompt(user_query):
     # Example prompt template
@@ -25,18 +23,15 @@ def create_prompt(user_query):
         template=user_prompt,
         input_variables=["context", "question"]
     )
+    
     retrieved_docs = retrive_papers(user_query)
-    #print(retrieved_docs)
+
     # Concatenate or summarize retrieved passages
     context = "\n\n".join(doc.page_content for doc in retrieved_docs)
     user_prompt = prompt.format(context=context, question=user_query)
-
-    response = ollama.chat(
-        model='llama2:7b',
-        messages=[
+    messages =[
             {'role': 'system', 'content': system_prompt},
             {'role': 'user', 'content': user_prompt},
         ]
-    )
 
-    return response['message']['content']
+    return messages
