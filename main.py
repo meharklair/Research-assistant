@@ -20,12 +20,12 @@ async def search_papers(query):
     # Search for papers with matching title in your Elasticsearch index (e.g., "papers")
     normalized_query = normalize_query(query)
     prompt = create_prompt(normalized_query)
-    return query_model('llama2:7b', prompt)
+    return query_model('tinyllama:1.1b', prompt)
 
 def main():
     prompt = create_prompt("Neural Networks in an Artificial Chemistry")
     print(prompt)
-    print(query_model('llama2:7b',prompt))
+    print(query_model('tinyllama:1.1b',prompt))
     
     
     

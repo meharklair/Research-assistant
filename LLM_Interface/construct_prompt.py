@@ -4,31 +4,27 @@ from Data_Retrival.retrieve_papers import retrive_papers
 def create_prompt(user_query):
     # Example prompt template
     user_prompt = """
-    Using only the following retrieved documents, answer the user’s question as accurately as possible. If the answer is not contained in these documents, say "I don't know."
-
     AUTOMATICALLY RETRIEVED CONTEXT:
     {context}
-
-    QUESTION:
-    {question}
-
-    Answer:
-    """
+    """ 
     system_prompt = """
-    You are an expert researcher in the Computer Science domain. MAKE SURE TO ONLY USE THE RETRIEVED CONTENT. You will act as a research assistant, answering questions and finding papers based on information automatically retrieved from relevant documents. THE CONTEXT IS NOT PROVIDED BY THE USER.
+    You are an expert researcher in the Computer Science domain. You will act as a research assistant who displays research papers, based on the retreived content display the names of each paper and give a brief explanation.\n
+    If the retrieved context is None only say I was unable to find papers on the topic. MAKE SURE TO ONLY USE THE RETRIEVED CONTENT. THE USER IS NOT PROVIDING THE RETRIEVED CONTEXT.
     """
 
 
     prompt = PromptTemplate(
         template=user_prompt,
-        input_variables=["context", "question"]
+        input_variables=["context"]
     )
     
-    retrieved_docs = retrive_papers(user_query)
+    context = retrive_papers(user_query)
 
     # Concatenate or summarize retrieved passages
-    context = "\n\n".join(doc.page_content for doc in retrieved_docs)
-    user_prompt = prompt.format(context=context, question=user_query)
+    if context != None:
+        context = "\n\n".join(doc.page_content for doc in context)
+        
+    user_prompt = prompt.format(context=context)
     messages =[
             {'role': 'system', 'content': system_prompt},
             {'role': 'user', 'content': user_prompt},

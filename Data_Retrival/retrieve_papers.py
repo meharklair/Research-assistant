@@ -31,5 +31,5 @@ def retrive_papers(query):
         url=es_url,
         api_key=es_api_key
     )
-    
-    return retriever.invoke(query)
+    retrived_docs = retriever.invoke(query)
+    return retrived_docs if retrived_docs else None
