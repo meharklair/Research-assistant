@@ -1,7 +1,7 @@
 from langchain.prompts import PromptTemplate
 from Data_Retrival.retrieve_papers import retrive_papers
 
-def create_prompt(user_query):
+def create_search_prompt(user_query):
     # Example prompt template
     user_prompt = """
     AUTOMATICALLY RETRIEVED CONTEXT:

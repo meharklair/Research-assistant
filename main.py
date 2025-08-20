@@ -1,6 +1,5 @@
-from LLM_Interface.construct_prompt import create_prompt
 from fastapi import FastAPI
-from LLM_Interface.construct_prompt import create_prompt
+from LLM_Interface.construct_prompt import create_search_prompt
 from LLM_Interface.query_model import query_model
 
 import re
@@ -19,15 +18,13 @@ def normalize_query(user_query):
 async def search_papers(query):
     # Search for papers with matching title in your Elasticsearch index (e.g., "papers")
     normalized_query = normalize_query(query)
-    prompt = create_prompt(normalized_query)
-    return query_model('tinyllama:1.1b', prompt)
+    prompt = create_search_prompt(normalized_query)
+    return query_model('llama2:7b', prompt)
 
 def main():
-    prompt = create_prompt("Neural Networks in an Artificial Chemistry")
+    prompt = create_search_prompt("Neural Networks in an Artificial Chemistry")
     print(prompt)
-    print(query_model('tinyllama:1.1b',prompt))
-    
-    
+    print(query_model('llama2:7b',prompt))
     
     
 if __name__ == "__main__":
