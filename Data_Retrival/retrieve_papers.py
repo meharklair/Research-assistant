@@ -1,32 +1,37 @@
 from elasticsearch import Elasticsearch, helpers
-from langchain.vectorstores.elasticsearch import ElasticsearchStore
-from langchain.embeddings.openai import OpenAIEmbeddings
+from langchain_elasticsearch import ElasticsearchRetriever
 
 es_url = "https://05aa1e0d47ee450da2fc6a10f39fc911.us-central1.gcp.cloud.es.io:443"
 es_api_key="SFJKWWhwZ0JxQjU3LVNLT1d4NmY6XzlHSXE2REV3MUM3eEhaQzQyUW80Zw=="
-embedding = OpenAIEmbeddings()
+
 
 
 def retrive_papers(query):
-    def bm25_query(search_query: str) -> dict:
-        return {
-            "query": {
-                "multi_match": {
-                    "query": search_query,
-                    "fields": ["abstract", "fornames", "keyname", "title"]
-                }
+
+    client = Elasticsearch(
+        es_url,
+        api_key=es_api_key
+    )
+    retrived_docs = client.search(
+    index="search-sep4",
+    body={
+        "_source": ["title", "abstract", "keywords", "content"],
+        "query": {
+            "multi_match": {
+                "query": "neural networks image recognition",
+                "fields": ["title", "abstract", "forenames", "keyname"]
             },
-            "_source": ["abstract", "fornames", "keyname", "title"],
-            "min_score": 2.0
-        }
+        },
+    "min_score": 2.0
+    }
+    ) 
+    # flatten dictionary to get results
+    retrived_docs = retrived_docs.body["hits"]["hits"]
 
-    
-
-    retriever = ElasticsearchStore(
-    index_name="search-sep4",
-    embedding=embedding,
-    url=es_url,
-    api_key=es_api_key
-    ),
-    retrived_docs = retriever.similarity_search(query, k=5, custom_query=bm25_query)
+    # extracts the dictionary in the list
+    merged_dict = {}
+    for d in retrived_docs:
+        merged_dict.update(d)
+    retrived_docs = merged_dict["_source"]
+    print(retrived_docs)
     return retrived_docs if retrived_docs else None
