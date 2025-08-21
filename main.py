@@ -5,7 +5,12 @@ from LLM_Interface.query_model import query_model
 import re
 app = FastAPI()
 
+
 def normalize_query(user_query):
+    ''' normalizes the search query
+        I might need to change this to an LLM extractor or using intent
+    
+    '''
     phrases_to_remove = [
         r"can you find me", r"please find", r"show me", r"look up", r"find papers on"
     ]
@@ -22,9 +27,10 @@ async def search_papers(query):
     return query_model('llama2:7b', prompt)
 
 def main():
-    prompt = create_search_prompt("Neural Networks in an Artificial Chemistry")
-    print(prompt)
-    print(query_model('llama2:7b',prompt))
+    while True:
+        user_input = input("What would you like to ask?")
+        prompt = create_search_prompt(user_input)
+        print(query_model('llama2:7b',prompt))
     
     
 if __name__ == "__main__":

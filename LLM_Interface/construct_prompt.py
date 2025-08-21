@@ -20,7 +20,8 @@ def create_search_prompt(user_query):
     )
     
     context = retrive_papers(user_query)
-
+    if context == None:
+        return None
     # Concatenate or summarize retrieved passages
   
     #context = "\n\n".join(doc.page_content for doc in context)
