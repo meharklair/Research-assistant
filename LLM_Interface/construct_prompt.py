@@ -4,27 +4,28 @@ from Data_Retrival.retrieve_papers import retrive_papers
 def create_search_prompt(user_query):
     # Example prompt template
     user_prompt = """
-    AUTOMATICALLY RETRIEVED CONTEXT:
+    For the explanation put a focus on how it relates to {user_query}
+    AUTOMATICALLY RETRIEVED CONTEXT:\n
     {context}
     """ 
     system_prompt = """
-    You are an expert researcher in the Computer Science domain. You will act as a research assistant who displays research papers, based on the retreived content display the names of each paper and give a brief explanation.\n
-    If the retrieved context is None only say I was unable to find papers on the topic. MAKE SURE TO ONLY USE THE RETRIEVED CONTENT. THE USER IS NOT PROVIDING THE RETRIEVED CONTEXT.
+    You are an expert researcher in the Computer Science domain. You will be provided with a paper/papers and your job is to list the paper and provide the name, the authors names, and a brief explanation.\n
+    Begin each output with: "Here are what papers I found!"
     """
 
 
     prompt = PromptTemplate(
         template=user_prompt,
-        input_variables=["context"]
+        input_variables=["context", "user_query"]
     )
     
     context = retrive_papers(user_query)
 
     # Concatenate or summarize retrieved passages
-    if context != None:
-        context = "\n\n".join(doc.page_content for doc in context)
+  
+    #context = "\n\n".join(doc.page_content for doc in context)
         
-    user_prompt = prompt.format(context=context)
+    user_prompt = prompt.format(context=context, user_query=user_query)
     messages =[
             {'role': 'system', 'content': system_prompt},
             {'role': 'user', 'content': user_prompt},
