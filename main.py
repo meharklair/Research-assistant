@@ -27,11 +27,23 @@ async def search_papers(query):
     return query_model('llama2:7b', prompt)
 
 def main():
+    print_ascii()
+    exit()
     while True:
         user_input = input("What would you like to ask?")
         prompt = create_search_prompt(user_input)
         print(query_model('llama2:7b',prompt))
     
+
+
+@staticmethod
+def print_ascii():
+    ascii_art = """
+                                                                                   
+                                                                                            
+
+    """
+    print(ascii_art)
     
 if __name__ == "__main__":
     main()
