@@ -1,9 +1,9 @@
-import ollama
+from ollama import chat
 
 def query_model(model, messages):
     if messages == None:
         return "Sorry, I was unable to find any papers"
-    response = ollama.chat(
+    response = chat(
         model=model,
         messages=messages
     )

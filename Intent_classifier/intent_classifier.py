@@ -72,12 +72,12 @@ def load_model():
     print("Model loaded")
     return model
 
+
+
+
+
 def test_classifier():
     model = load_model()
-
-    def classify_intent(query):
-        intent = model.predict([query])[0]
-        return intent
 
     # Try some queries
     queries = [
@@ -88,17 +88,21 @@ def test_classifier():
     ]
 
     for q in queries:
-        print(f"Query: {q}\nPredicted intent: {classify_intent(q)}\n")
+        print(f"Query: {q}\nPredicted intent: {classify_intent_with_uncertainty(model, q)}\n")
 
 def query_intent_classifier(user_input):
     model = load_model()
-
-    def classify_intent(query):
-        intent = model.predict([query])[0]
-        return intent
     
-    return classify_intent(user_input)
+    return classify_intent_with_uncertainty(model, user_input)
 
+
+def classify_intent_with_uncertainty(model, query, threshold=0.4):
+    probas = model.predict_proba([query])[0]       # Probabilities for each class
+    max_proba = max(probas)
+    if max_proba < threshold:
+        return "unknown"
+    else:
+        return model.classes_[probas.argmax()]
 
 if __name__ == "__main__":
     train_classifier()
