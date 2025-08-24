@@ -8,4 +8,4 @@ def query_model(model, messages):
         messages=messages
     )
     
-    return response['message']['content']    
+    return response['message']['content']
