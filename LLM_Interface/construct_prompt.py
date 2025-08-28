@@ -4,13 +4,31 @@ from Data_Retrival.retrieve_papers import retrive_papers
 def create_search_prompt(user_query):
     # Example prompt template
     user_prompt = """
-    For the explanation put a focus on how it relates to {user_query}
-    AUTOMATICALLY RETRIEVED CONTEXT:\n
+    You are summarizing the following papers in relation to the user’s query:
+    User Query: {user_query}
+    
+    AUTOMATICALLY RETRIEVED CONTEXT:
     {context}
+
+    Instructions:
+    1. Extract each paper's title, abstract, and author list (if available).
+    2. Provide a 2-3 sentence explanation of the paper.
+    3. Explicitly connect the explanation back to the user query: "{user_query}".
+    4. If details are missing (e.g., no authors provided), state that clearly instead of guessing.
     """ 
     system_prompt = """
-    You are an expert researcher in the Computer Science domain. You will be provided with a paper/papers and your job is to list the paper and provide the name, the authors names, and a brief explanation.\n
-    Begin each output with: "Here are what papers I found!"
+    You are an expert researcher in the Computer Science domain. 
+    You must analyze the provided context and create a structured list of relevant papers. 
+    Each paper entry should include:
+    - **Paper Title**
+    - **Authors** (or state "Not available")
+    - **Explanation**: Brief summary highlighting how it relates to the user’s query.
+
+    Output Format:
+    Begin with: "Here are what papers I found!"
+    Then list each paper clearly using bullet points.
+    Do not invent information not present in the context.
+    Keep tone professional and concise.
     """
 
 
@@ -33,3 +51,5 @@ def create_search_prompt(user_query):
         ]
 
     return messages
+
+
