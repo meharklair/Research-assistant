@@ -1,4 +1,7 @@
 # AI Research Assistant
+<img width="1095" height="538" alt="image" src="https://github.com/user-attachments/assets/1ce8cb15-6b2e-49f0-8770-11bbb4f341cd" />
+
+
 ## Overview
 This project is a scalable research tool built on Elasticsearch, enhanced with semantic vector search and keyword matching. It is designed to support advanced retrieval functionalities such as hybrid search, filtering, and summarization with LLMs.
 
