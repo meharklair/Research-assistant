@@ -2,8 +2,9 @@ from LLM_Interface.construct_prompt import create_search_prompt, create_summariz
 from LLM_Interface.query_model import query_model
 from helper.logging import Logging, Formatting
 from Intent_classifier.intent_classifier import query_intent_classifier
-import re
+from rake_nltk import Rake
 import click
+
 
 
 log = Logging()
@@ -21,6 +22,11 @@ def main(model):
 
     while True:
         user_input = input("Enter your query below: \n")
+        r = Rake()
+        r.extract_keywords_from_text(user_input)
+        keywords = r.get_ranked_phrases()
+        print(keywords)
+        exit()
         if user_input.lower() == "help":
             fmt.print_help()
             continue
@@ -29,6 +35,8 @@ def main(model):
             exit()
         intent = query_intent_classifier(user_input)
         if intent == "search":
+            user_input = user_input.split(" ")[-1]
+            print(user_input)
             prompt = create_search_prompt(user_input)
             print(query_model(model,prompt))
         elif intent == "summarize":
